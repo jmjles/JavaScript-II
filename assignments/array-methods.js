@@ -1,6 +1,7 @@
 // A local community center is holding a fund raising 5k fun run and has invited 50 small businesses to make a small donation on their behalf for some much needed updates to their facilities.  Each business has assigned a representative to attend the event along with a small donation.
 
 // Scroll to the bottom of the list to use some advanced array methods to help the event director gather some information from the businesses.
+console.log('########## Array Methods ##########');
 
 const runners = [
   { id: 1, first_name: "Charmain", last_name: "Seiler", email: "cseiler0@wired.com", shirt_size: "2XL", company_name: "Divanoodle", donation: 75 },
@@ -55,31 +56,103 @@ const runners = [
   { id: 50, first_name: "Shell", last_name: "Baine", email: "sbaine1d@intel.com", shirt_size: "M", company_name: "Gabtype", donation: 171 },
 ];
 
+const msg = (val) => {
+  return JSON.stringify(val,null,'\t').replace(/,/g,'');
+}
+
+const display = (elId,msg) =>{
+  let list = []
+  if(Array.isArray(msg)){
+    msg = msg.map((m)=> `${m} <br/>`);
+   
+    if(msg.length > 5){
+
+      for(let i = 0; i < 5; i++){
+
+        list.push(msg[i])
+      }
+
+      list.push('(The rest is in console.)')
+    }
+
+    else{
+
+      msg.map((item)=> list.push(item).toString())
+    }
+  }
+  else{
+
+    list.push(msg)
+  }
+  document.getElementById(elId).innerHTML += list.toString().replace(/,/g,'');
+
+}
+
 // ==== Challenge 1: Use .forEach() ====
 // The event director needs both the first and last names of each runner for their running bibs. Combine both the first and last names and populate a new array called `fullNames`. This array will contain just strings.
-let fullNames = [];
-console.log(fullNames);
+let fullNames = runners.map((person)=> `${person.first_name} ${person.last_name}`);
+display('aChallenge1',fullNames)
+console.log(msg(fullNames));
 
 // ==== Challenge 2: Use .map() ====
 // The event director needs to have all the runners' first names in uppercase because the director BECAME DRUNK WITH POWER. Populate an array called `firstNamesAllCaps`. This array will contain just strings.
-let firstNamesAllCaps = [];
-console.log(firstNamesAllCaps);
+let firstNamesAllCaps = runners.map((person) => `${person.last_name.toUpperCase()}`);
+display('aChallenge2',firstNamesAllCaps)
+console.log(msg(firstNamesAllCaps));
 
 // ==== Challenge 3: Use .filter() ====
 // The large shirts won't be available for the event due to an ordering issue. We need a filtered version of the runners array, containing only those runners with large sized shirts so they can choose a different size. This will be an array of objects.
-let runnersLargeSizeShirt = [];
-console.log(runnersLargeSizeShirt);
+let runnersLargeSizeShirt = runners.filter((person)=> person.shirt_size === 'L');
+let list = [];
+runnersLargeSizeShirt.map((m)=> list.push(`ID: ${m.id} \t ${m.first_name} ${m.last_name}`))
+display('aChallenge3', list)
+console.log(msg(runnersLargeSizeShirt));
 
 // ==== Challenge 4: Use .reduce() ====
 // The donations need to be tallied up and reported for tax purposes. Add up all the donations and save the total into a ticketPriceTotal variable.
-let ticketPriceTotal = 0;
+let ticketPriceTotal = 0
+runners.forEach((person) => ticketPriceTotal+= person.donation);
+display('aChallenge4', ticketPriceTotal);
 console.log(ticketPriceTotal);
 
 // ==== Challenge 5: Be Creative ====
 // Now that you have used .forEach(), .map(), .filter(), and .reduce().  I want you to think of potential problems you could solve given the data set and the 5k fun run theme.  Try to create and then solve 3 unique problems using one or many of the array methods listed above.
 
 // Problem 1
-
+display('aChallenge5','<h3>Problem 1</h3>')
+//Coach needs everyone with the sponsor of Jabbersphere
+let peopleSpons = [];
+let sponsered = runners.filter((r)=> r.company_name==='Jabbersphere')
+sponsered.map((s) => peopleSpons.push(`ID: ${s.id} \t ${s.first_name} ${s.last_name}`));
+display('aChallenge5', peopleSpons);
+console.log(msg(sponsered));
 // Problem 2
+display('aChallenge5','<h3>Problem 2</h3>')
+//Coach needs everyone that donated more than 100
+let over100 = runners.filter((m)=> m.donation > 100);
+let bangers = over100.map((b) => `ID: ${b.id} \t ${b.first_name} ${b.last_name}`)
+display('aChallenge5', bangers);
+console.log(msg(over100))
 
 // Problem 3
+display('aChallenge5','<h3>Problem 3</h3>')
+//Coach needs 3 random people
+let randomNum = (min = 0, max = runners.length) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+let num=[]
+for(i=0; i<3;i++){
+  num.push(randomNum())
+}
+
+let randomPeople = [];
+num.map((x)=>{
+  runners.filter((i) =>{ 
+    if(i.id===x){
+      randomPeople.push(`ID: ${i.id} \t ${i.first_name} ${i.last_name}`)
+  }})
+})
+display('aChallenge5',randomPeople);
+console.log(msg(randomPeople))
